@@ -36,7 +36,7 @@ def trade_crypto(request):
         
 
     
-    df = pd.DataFrame(data)
+    df = pd.DataFrame(data, columns = ['time', 'low', 'high', 'open', 'close', 'volume'])
     df.to_csv('output.csv')
 
     return 'hello'
