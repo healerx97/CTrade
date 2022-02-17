@@ -1,7 +1,11 @@
 import os
 import ccxt
 import requests
-
+import datetime
+from dateutil import parser
+import pandas as pd
+import numpy as np
+import json
 key = os.getenv('API_KEY')
 secret = os.getenv('API_SECRET')
 pp = os.getenv('PASSPHRASE')
@@ -13,17 +17,29 @@ coinbase = ccxt.coinbasepro({
 })
 
 def trade_crypto(request):
-    markets = coinbase.load_markets()
+    # markets = coinbase.load_markets()
     cur_id = 'ETH-USDC'
-    start_time = '2021-12-10'
-    end_time = '2022-02-13'
-    url = f"https://api.exchange.coinbase.com/products/{cur_id}/candles?granularity=86400&start={start_time}&end={end_time}"
-
+    end_time = datetime.datetime.now().isoformat()[0:10]
+    start_time = (parser.parse(end_time) - datetime.timedelta(3)).isoformat()[0:10]
+    # end_time = '2022-02-13'
+    granularity = '900' #15mins
+    # 30 day candlesticks
+    data = []
     headers = {"Accept": "application/json"}
 
+    for i in range(15):
+        url = f"https://api.exchange.coinbase.com/products/{cur_id}/candles?granularity={granularity}&start={start_time}&end={end_time}"
+        response = requests.request("GET", url, headers=headers)
+        data += response.json()
+        end_time = (parser.parse(end_time) - datetime.timedelta(3)).isoformat()[0:10]
+        start_time = (parser.parse(start_time) - datetime.timedelta(3)).isoformat()[0:10]
+        
 
-    response = requests.request("GET", url, headers=headers)
-    return response.text
+    
+    df = pd.DataFrame(data)
+    df.to_csv('output.csv')
+
+    return 'hello'
 
 
 # pull in candle stats 2days at a time  x 15
