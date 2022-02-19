@@ -46,3 +46,5 @@ def trade_crypto(request):
 # https://dev.to/edbentley/build-your-react-charts-without-a-library-35o8
 # https://css-tricks.com/how-to-make-charts-with-svg/
 # https://rvlasveld.github.io/blog/2013/07/02/creating-interactive-graphs-with-svg-part-1/
+# https://www.digitalocean.com/community/tutorials/build-a-to-do-application-using-django-and-react
+
