@@ -47,4 +47,4 @@ def trade_crypto(request):
 # https://css-tricks.com/how-to-make-charts-with-svg/
 # https://rvlasveld.github.io/blog/2013/07/02/creating-interactive-graphs-with-svg-part-1/
 # https://www.digitalocean.com/community/tutorials/build-a-to-do-application-using-django-and-react
-
+# deployment https://dev.to/mdrhmn/deploying-react-django-app-using-heroku-2gfa
