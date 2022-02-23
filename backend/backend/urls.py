@@ -24,4 +24,5 @@ router.register(r'coins', views.CTView, 'CTrade')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/getCandles', views.getCandles)
 ]
