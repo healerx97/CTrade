@@ -27,11 +27,10 @@ class CTView(viewsets.ModelViewSet):
 def getCandles(request):
     if request.method == "POST":
         param = request.data
+        # starting params defined
         cur_id = param['id']
-        # cur_id = 'ETH-USDC'
         end_time = datetime.datetime.now().isoformat()[0:10]
         start_time = (parser.parse(end_time) - datetime.timedelta(3)).isoformat()[0:10]
-        # end_time = '2022-02-13'
         granularity = '900' #15mins
         # 30 day candlesticks
         data = []
@@ -46,7 +45,27 @@ def getCandles(request):
             
 
         
-        df = pd.DataFrame(data, columns = ['time', 'low', 'high', 'open', 'close', 'volume'])
-        df.to_csv('output.csv')
+        df = pd.DataFrame(data, columns = ['time', 'low', 'high', 'open', 'close', 'volume']).to_json(orient='records')
+        # df.to_csv('output.csv')
 
-        return 'hello'
+        return JsonResponse(json.loads(df), safe = False)
+
+@api_view(('GET',))
+def importCoinPairs(request):
+    url = "https://api.exchange.coinbase.com/products"
+    headers = {"Accept": "application/json"}
+    response = requests.request("GET", url, headers=headers)
+    newObjList = []
+    for c in response.json():
+        coinID = c['id']
+        base = c['base_currency']
+        quote = c['quote_currency']
+        display = c['display_name']
+        if Coin.objects.filter(id=coinID).exists():
+            continue
+        else:
+            newobj = Coin.objects.create(id=coinID, base=base, quote=quote, displayName= display)
+            newObjList.append(newobj.getID())
+    return JsonResponse(newObjList, safe=False)
+
+    

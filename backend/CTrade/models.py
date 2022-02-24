@@ -9,3 +9,6 @@ class Coin(models.Model):
     quote = models.TextField()
     def __str__(self):
         return self.displayName
+
+    def getID(self):
+        return self.id
