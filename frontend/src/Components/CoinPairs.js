@@ -10,22 +10,6 @@ function CoinPairs({currentCoin, setCurrentCoin, navigate}) {
             if (res.status==200) {
                 console.log(currentCoin.id)
                 setCoins(res.data)
-                let candleHeaders = {
-                    headers : {
-                        'Content-Type': 'application/json',
-                    }
-                }
-                axios
-                .post('api/getCandles',{
-                    'id': currentCoin.id
-                }, candleHeaders)
-                .then((r)=> {
-                    console.log(r.data)
-                    // setCandleData(res.data)
-                })
-                .catch(function (error) {
-                    console.log(error.toJSON());
-                  })
             }
         })
         .catch(function (error) {

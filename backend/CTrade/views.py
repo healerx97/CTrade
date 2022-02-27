@@ -23,6 +23,7 @@ class CTView(viewsets.ModelViewSet):
     serializer_class = CoinsSerializer
     queryset = Coin.objects.all()
 
+
 @api_view(('POST',))
 def getCandles(request):
     if request.method == "POST":
