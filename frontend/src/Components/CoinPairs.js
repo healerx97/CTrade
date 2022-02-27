@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
-function CoinPairs({currentCoin, setCurrentCoin, navigate}) {
+function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, navigate}) {
     let [coins, setCoins] = useState([])
     React.useEffect(()=> {
         axios
         .get('/api/coins')
         .then((res)=> {
             if (res.status==200) {
-                console.log(currentCoin.id)
                 setCoins(res.data)
             }
         })
@@ -20,6 +19,20 @@ function CoinPairs({currentCoin, setCurrentCoin, navigate}) {
     function handleCoinClick(coin,e) {
         e.preventDefault()
         setCurrentCoin(coin)
+        let coinData = {
+            id: coin.id
+        }
+        fetch('http://localhost:8000/api/getCandles', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(coinData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            setCandleData(data)
+        })
         navigate('/candles')
     }
 

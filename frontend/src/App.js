@@ -17,7 +17,7 @@ function App() {
       <div className="App">
         <Navbar navigate={navigate}/>
         <Routes>
-          <Route path = '/allcoinpairs' element={<CoinPairs currentCoin={currentCoin} setCurrentCoin={setCurrentCoin} navigate={navigate}/>}/>
+          <Route path = '/allcoinpairs' element={<CoinPairs currentCoin={currentCoin} setCurrentCoin={setCurrentCoin} candleData={candleData} setCandleData={setCandleData} navigate={navigate}/>}/>
           <Route path = '/candles' element={<Candles candleData={candleData} setCandleData={setCandleData} currentCoin={currentCoin}/>}/>
           <Route path = '/' element={<Home/>}/>
         </Routes>

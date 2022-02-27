@@ -6,21 +6,21 @@ function Candles({currentCoin, candleData, setCandleData}) {
             id: currentCoin.id
         }
         //axios gave me 403 errors with cors enabled?
-        fetch('http://localhost:8000/api/getCandles', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(coinData),
-        })
-        .then(response => response.json())
-        .then(data => {
-        console.log(data);
-        })
-        .catch((error) => {
-        console.error('Error:', error);
-        });
-    })
+        // fetch('http://localhost:8000/api/getCandles', {
+        // method: 'POST',
+        // headers: {
+        //     'Content-Type': 'application/json',
+        // },
+        // body: JSON.stringify(coinData),
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     setCandleData(data)
+        //     console.log(candleData)
+        // })
+        console.log(currentCoin)
+        console.log(candleData)
+    },[])
     
 
   return (
