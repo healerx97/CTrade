@@ -1,28 +1,29 @@
 import './App.css';
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
-import { Route, Routes, useRouteMatch, useHistory, Redirect} from 'react-router-dom'
-import {BrowserRouter as Router} from 'react-router-dom'
+import { Route, Routes, useRouteMatch, useNavigate, Redirect} from 'react-router-dom'
 // import components
 import Navbar from './Components/Navbar';
 import Home from './Components/Home';
 import CoinPairs from './Components/CoinPairs';
-
+import Candles from './Components/Candles';
 function App() {
   let [candleData, setCandleData] = useState({})
+  let [currentCoin, setCurrentCoin] = useState({})
+  const navigate = useNavigate()
+  
 
-  return (
-    <Router>
-    <div className="App">
-      <Navbar/>
-      <Routes>
-        <Route path = '/allcoinpairs' element={<CoinPairs/>}/>
-        <Route path = '/' element={<Home/>}/>
-      </Routes>
+  return (   
+      <div className="App">
+        <Navbar navigate={navigate}/>
+        <Routes>
+          <Route path = '/allcoinpairs' element={<CoinPairs currentCoin={currentCoin} setCurrentCoin={setCurrentCoin} navigate={navigate}/>}/>
+          <Route path = '/candles' element={<Candles candleData={candleData} setCandleData={setCandleData} currentCoin={currentCoin}/>}/>
+          <Route path = '/' element={<Home/>}/>
+        </Routes>
 
-      
-    </div>
-    </Router>
+        
+      </div>
   );
 }
 
