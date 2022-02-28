@@ -5,7 +5,28 @@ function Candles({currentCoin, candleData, setCandleData}) {
         console.log(currentCoin)
         console.log(candleData)
     },[])
-    
+    function renderCandles() {
+
+        if (candleData) {
+            let w = 10 * candleData.length
+            
+            for (can in candleData) {
+                let time = can['time']
+                let low = can['low']
+                let high = can['high']
+                let open = can['open']
+                let close = can['close']
+                let volume = can['volume']
+                
+
+            }
+        }
+        else {
+            return (
+                <div>No Data</div>
+            )
+        }
+    }
 
   return (
     <div class='flex flex-col items-center'>
@@ -13,39 +34,10 @@ function Candles({currentCoin, candleData, setCandleData}) {
             {currentCoin.id}
         </div>
         <div class = 'border flex'>
-        <svg viewBox="0 0 500 100" class="chart p-8">
-  
-            <polyline
-                fill="none"
-                stroke="#0074d9"
-                stroke-width="2"
-                points="
-                00,120
-                20,60
-                40,80
-                60,20
-                80,80
-                100,80
-                120,60
-                140,100
-                160,90
-                180,80
-                200, 110
-                220, 10
-                240, 70
-                260, 100
-                280, 100
-                300, 40
-                320, 0
-                340, 100
-                360, 100
-                380, 120
-                400, 60
-                420, 70
-                440, 80
-                "
-            />
-        
+        <svg viewBox="-10 -10 210 210" class="chart p-10" vector-effect='non-scaling-stroke'>
+            <line x1="0" y1="0" x2="0" y2="200" style={{'stroke':'rgb(0,0,0)', 'stroke-width':'2'}} />
+            <line x1="10" y1="0" x2="10" y2="200" style={{'stroke':'rgb(0,0,0)', 'stroke-width':'2'}} />
+            <line x1="90" y1="0" x2="90" y2="200" style={{'stroke':'rgb(0,0,0)', 'stroke-width':'2'}} />
         </svg>
         </div>
     </div>
