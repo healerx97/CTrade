@@ -27,7 +27,7 @@ def trade_crypto(request):
     data = []
     headers = {"Accept": "application/json"}
 
-    for i in range(15):
+    for i in range(1):
         url = f"https://api.exchange.coinbase.com/products/{cur_id}/candles?granularity={granularity}&start={start_time}&end={end_time}"
         response = requests.request("GET", url, headers=headers)
         data += response.json()
@@ -37,7 +37,7 @@ def trade_crypto(request):
 
     
     df = pd.DataFrame(data, columns = ['time', 'low', 'high', 'open', 'close', 'volume'])
-    df.to_csv('output.csv')
+    # df.to_csv('output.csv')
 
     return 'hello'
 

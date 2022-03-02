@@ -37,7 +37,7 @@ def getCandles(request):
         data = []
         headers = {"Accept": "application/json"}
 
-        for i in range(10):
+        for i in range(1):
             url = f"https://api.exchange.coinbase.com/products/{cur_id}/candles?granularity={granularity}&start={start_time}&end={end_time}"
             response = requests.request("GET", url, headers=headers)
             data += response.json()

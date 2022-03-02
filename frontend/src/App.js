@@ -8,7 +8,7 @@ import Home from './Components/Home';
 import CoinPairs from './Components/CoinPairs';
 import Candles from './Components/Candles';
 function App() {
-  let [candleData, setCandleData] = useState({})
+  let [candleData, setCandleData] = useState([])
   let [currentCoin, setCurrentCoin] = useState({})
   const navigate = useNavigate()
   
