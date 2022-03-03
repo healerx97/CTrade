@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 function Candles({currentCoin, candleData, setCandleData}) {
-    let w = 15 * candleData.length +200
+    let w = 10 * candleData.length +200
     let minH = candleData? (
         Math.min.apply(Math, candleData.map(function(o) { return o.low }))
     ): null
@@ -11,7 +11,7 @@ function Candles({currentCoin, candleData, setCandleData}) {
     let d = minH? (
         maxH-minH
     ): 0
-    let h = w/2 +200
+    let h = w/2 +500
     
     
     function timeConverter(UNIX_timestamp){
@@ -36,15 +36,15 @@ function Candles({currentCoin, candleData, setCandleData}) {
             let close = can['close']
             let volume = can['volume']
             
-            let p1 = String((candleData.indexOf(can)*15)+200)
+            let p1 = (candleData.indexOf(can)*10)+200
             let v1 = h-((low-minH)/d*h)
             let v2 = h-((high-minH)/d*h)
             let c1 = h-((open-minH)/d*h)
             let c2 = h-((close-minH)/d*h)
             return (
             <g>
-                <line x1={p1} y1={v1} x2={p1} y2={v2} style={{'stroke':'rgb(0,0,0)', 'stroke-width':'2'}} />
-                <line x1={p1} y1={c1} x2={p1} y2={c2} style={{'stroke':'rgb(0,0,100)', 'stroke-width':'5'}} />
+                <line x1={p1} y1={v1-200} x2={p1} y2={v2-200} style={{'stroke':'rgb(0,0,0)', 'stroke-width':'2'}} />
+                <line x1={p1} y1={c1-200} x2={p1} y2={c2-200} style={{'stroke':'rgb(0,0,100)', 'stroke-width':'5'}} />
             </g>
             )
         })
@@ -58,15 +58,15 @@ function Candles({currentCoin, candleData, setCandleData}) {
     let end_time = timeConverter(endT)
   return (
     <div class='flex flex-col items-center'>
-        <div>
+        <div class='text-xl font-bold p-3 border border-x-transparent bg-blue-100 rounded-xl shadow-md mb-2'>
             {currentCoin.id}
         </div>
-        <div class = 'border flex'>
-        <svg viewBox= {`-10 -10 ${w} ${h}`} class="chart p-10" vector-effect='non-scaling-stroke'>
-            <text className="label" x='90' y={h-30} style={{'text-anchor':'end'}}>{minH}</text>
-            <text className="label" x='90' y={100} style={{'text-anchor':'end'}}>{maxH}</text>
-            <text className="label" x={w/10} y={h-30} style={{'text-anchor':'center'}}>{start_time}</text>
-            <text className="label" x={w-250} y={h-30} style={{'text-anchor':'center'}}>{end_time}</text>
+        <div class = 'border flex rounded shadow-lg'>
+        <svg viewBox= {`-110 -210 ${w+210} ${h+210}`} class="chart p-10" vector-effect='non-scaling-stroke'>
+            <text className="label" x='90' y={h-100} style={{'text-anchor':'end'}}>{minH}</text>
+            <text className="label" x='90' y={-90} style={{'text-anchor':'end'}}>{maxH}</text>
+            <text className="label" x={200} y={h-10} style={{'text-anchor':'center'}}>{start_time}</text>
+            <text className="label" x={w-200} y={h-10} style={{'text-anchor':'center'}}>{end_time}</text>
             {renderCandles}
         </svg>
         </div>

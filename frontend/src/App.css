@@ -4,11 +4,8 @@
 
 
 .chart {
-  background: white;
   width: 1500px;
   height: 100%;
-  border-left: 1px dotted #555;
-  border-bottom: 1px dotted #555;
 }
 
 .label {
