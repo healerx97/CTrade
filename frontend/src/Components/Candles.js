@@ -11,7 +11,7 @@ function Candles({currentCoin, candleData, setCandleData}) {
     let d = minH? (
         maxH-minH
     ): 0
-    let h = d? d:1000
+    let h = w/2
     
     console.log(minH)
     console.log(h)
