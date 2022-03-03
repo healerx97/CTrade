@@ -8,7 +8,9 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, navi
         .get('/api/coins')
         .then((res)=> {
             if (res.status==200) {
-                setCoins(res.data)
+                let temp = res.data
+                temp = temp.filter(c=>c.quote == 'USDC')
+                setCoins(temp)
             }
         })
         .catch(function (error) {
