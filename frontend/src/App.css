@@ -5,8 +5,14 @@
 
 .chart {
   background: white;
-  width: 1000px;
+  width: 1500px;
   height: 100%;
   border-left: 1px dotted #555;
   border-bottom: 1px dotted #555;
+}
+
+.label {
+  font-size: xx-large;
+  font-weight:bold;
+  font-family:Verdana, Geneva, Tahoma, sans-serif
 }
