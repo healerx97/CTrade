@@ -11,5 +11,6 @@
 .label {
   font-size: xx-large;
   font-weight:bold;
+  color: white !important;
   font-family:Verdana, Geneva, Tahoma, sans-serif
 }

@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 function Candles({currentCoin, candleData, setCandleData}) {
-    let w = 10 * candleData.length +200
+    let [ratio, setRatio] = useState(10)
+    let w = ratio * candleData.length +200
     let minH = candleData? (
         Math.min.apply(Math, candleData.map(function(o) { return o.low }))
     ): null
@@ -16,14 +17,13 @@ function Candles({currentCoin, candleData, setCandleData}) {
     
     function timeConverter(UNIX_timestamp){
         var a = new Date(UNIX_timestamp * 1000);
-        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         var year = a.getFullYear();
-        var month = months[a.getMonth()];
+        var month = a.getMonth() +1
         var date = a.getDate();
         var hour = a.getHours();
         var min = a.getMinutes();
         var sec = a.getSeconds();
-        var time = date + ' ' + month + ' ' + year
+        var time = month + '/' + date + '/' + year
         return time;
       }
 
@@ -36,7 +36,7 @@ function Candles({currentCoin, candleData, setCandleData}) {
             let close = can['close']
             let volume = can['volume']
             
-            let p1 = (candleData.indexOf(can)*10)+200
+            let p1 = (candleData.indexOf(can)*ratio)+200
             let v1 = h-((low-minH)/d*h)
             let v2 = h-((high-minH)/d*h)
             let c1 = h-((open-minH)/d*h)
@@ -44,12 +44,21 @@ function Candles({currentCoin, candleData, setCandleData}) {
             return (
             <g>
                 <line x1={p1} y1={v1-200} x2={p1} y2={v2-200} style={{'stroke':'rgb(0,0,0)', 'stroke-width':'2'}} />
-                <line x1={p1} y1={c1-200} x2={p1} y2={c2-200} style={{'stroke':'rgb(0,0,100)', 'stroke-width':'5'}} />
+                <line x1={p1} y1={c1-200} x2={p1} y2={c2-200} style={{'stroke':'rgb(0,0, 232)', 'stroke-width':'5'}} />
             </g>
             )
         })
     ):(
         <div>No Data</div>
+    )
+
+    let renderAxis = candleData? (
+        <g>
+            <line x1={0+150} y1={-250} x2={0+150} y2={h-150} style={{'stroke':'rgb(0,0,0)', 'stroke-width':'1'}} />
+            <line x1={0+150} y1={h-150} x2={w+200} y2={h-150} style={{'stroke':'rgb(0,0,0)', 'stroke-width':'1'}} />
+        </g>
+    ) : (
+        <div></div>
     )
 
     let startT = candleData[0]?.time
@@ -61,14 +70,22 @@ function Candles({currentCoin, candleData, setCandleData}) {
         <div class='text-xl font-bold p-3 border border-x-transparent bg-blue-100 rounded-xl shadow-md mb-2'>
             {currentCoin.id}
         </div>
-        <div class = 'border flex rounded shadow-lg'>
-        <svg viewBox= {`-110 -210 ${w+210} ${h+210}`} class="chart p-10" vector-effect='non-scaling-stroke'>
-            <text className="label" x='90' y={h-100} style={{'text-anchor':'end'}}>{minH}</text>
-            <text className="label" x='90' y={-90} style={{'text-anchor':'end'}}>{maxH}</text>
-            <text className="label" x={200} y={h-10} style={{'text-anchor':'center'}}>{start_time}</text>
-            <text className="label" x={w-200} y={h-10} style={{'text-anchor':'center'}}>{end_time}</text>
-            {renderCandles}
-        </svg>
+        <div class = 'border flex rounded shadow-lg bg-slate-50'>
+            <svg viewBox= {`-110 -210 ${w+210} ${h+210}`} class="chart p-10" vector-effect='non-scaling-stroke'>
+                    <text className="label" x='0' y={h-200}>{minH}</text>
+                    <text className="label" x='0' y={-150}>{maxH}</text>
+                    <text className="label" x={150} y={h-10} >{start_time}</text>
+                    <text className="label" x={w-200} y={h-10}>{end_time}</text>
+                {renderCandles}
+                {renderAxis}
+                
+            </svg>
+            <div class='p-2 flex'>
+                <label class='font-bold'>
+                    <input class='p-1 mr-1' type='checkbox'></input>
+                    Volume
+                </label>
+            </div>
         </div>
     </div>
   )
