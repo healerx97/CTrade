@@ -3,8 +3,8 @@ import axios from 'axios'
 import RenderCandles from './RenderCandles'
 import RenderAxis from './RenderAxis'
 function Candles({currentCoin, candleData, setCandleData}) {
-    let [ratio, setRatio] = useState(10)
-    let [scale, setScale] = useState(0.2)
+    let [ratio, setRatio] = useState(15)
+    let [scale, setScale] = useState(0.3)
     let w = ratio * candleData.length
     let minH = candleData? (
         Math.min.apply(Math, candleData.map(function(o) { return o.low }))
@@ -28,7 +28,7 @@ function Candles({currentCoin, candleData, setCandleData}) {
             <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale*2)} ${parseInt(h*(1+scale*2))}`} class="chart p-10" vector-effect='non-scaling-stroke'>
                     
                 {candleData? <RenderCandles candleData={candleData} w={w} h={h} d={d} minH={minH} ratio={ratio} scale={scale}/> : null}
-                {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} scale={scale}/>: null}
+                {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} d={d} scale={scale}/>: null}
                 
             </svg>
             

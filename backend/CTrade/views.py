@@ -46,10 +46,12 @@ def getCandles(request):
             
 
         
-        df = pd.DataFrame(data, columns = ['time', 'low', 'high', 'open', 'close', 'volume']).to_json(orient='records')
+        df = pd.DataFrame(data, columns = ['time', 'low', 'high', 'open', 'close', 'volume'])
+        df = df.drop_duplicates()
+        jsonDF = df.to_json(orient='records')
         # df.to_csv('output.csv')
 
-        return JsonResponse(json.loads(df), safe = False)
+        return JsonResponse(json.loads(jsonDF), safe = False)
 
 @api_view(('GET',))
 def importCoinPairs(request):

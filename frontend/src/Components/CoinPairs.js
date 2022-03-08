@@ -9,7 +9,7 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, navi
         .then((res)=> {
             if (res.status==200) {
                 let temp = res.data
-                temp = temp.filter(c=>c.quote == 'USDC')
+                temp = temp.filter(c=>c.quote == 'USD')
                 setCoins(temp)
             }
         })
