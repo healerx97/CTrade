@@ -24,14 +24,15 @@ function Candles({currentCoin, candleData, setCandleData}) {
         <div class='text-xl font-bold p-3 border border-x-transparent bg-blue-100 rounded-xl shadow-md mb-2'>
             {currentCoin.id}
         </div>
-        <div class = 'border flex rounded shadow-lg bg-slate-50'>
-            <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale)} ${h*(1+scale)}`} class="chart p-10" vector-effect='non-scaling-stroke'>
+        <div class = 'border w-3/4 flex justify-center rounded shadow-lg bg-slate-50'>
+            <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale*2)} ${parseInt(h*(1+scale*2))}`} class="chart p-10" vector-effect='non-scaling-stroke'>
                     
                 {candleData? <RenderCandles candleData={candleData} w={w} h={h} d={d} minH={minH} ratio={ratio} scale={scale}/> : null}
                 {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} scale={scale}/>: null}
                 
             </svg>
-            <div class='p-2 flex'>
+            
+            <div class='p-2 flex border'>
                 <label class='font-bold'>
                     <input class='p-1 mr-1' type='checkbox'></input>
                     Volume

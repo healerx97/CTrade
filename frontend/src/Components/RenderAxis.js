@@ -21,13 +21,12 @@ function RenderAxis({candleData, minH, maxH, h, w, scale}) {
 
   return (
     <g>
-        <line x1={0} y1={h*scale} x2={0} y2={h*(1+scale)} style={{'stroke':'rgb(0,0,0)', 'stroke-width':'1'}} />
-        <line x1={0} y1={h*(1+scale)} x2={w} y2={h*(1+scale)} style={{'stroke':'rgb(0,0,0)', 'stroke-width':'1'}} />
-        <text className="label" x={-w*scale/2} y={h*(1+scale)}>{minH}</text>
-        <text className="label" x={-w*scale/2} y={h*scale}>{maxH}</text>
-        <text className="label" x={w*(scale-1)} y={h} >{start_time}</text>
-        <text className="label" x={w*(2-scale)} y={h}>{end_time}</text>
-        <circle cx={w} cy={h*scale + h} r="50"/>
+        <line x1={-w*scale/2} y1={-h*scale/2} x2={-w*scale/2} y2={h*(1+scale/2)} style={{'stroke':'rgb(0,0,0)', 'stroke-width':'1'}} />
+        <line x1={-w*scale/2} y1={h*(1+scale/2)} x2={w*(1+scale)} y2={h*(1+scale/2)} style={{'stroke':'rgb(0,0,0)', 'stroke-width':'1'}} />
+        <text className="label" x={-w*scale} y={h}>{minH}</text>
+        <text className="label" x={-w*scale} y={0}>{maxH}</text>
+        <text className="label" x={0} y={h*(1+scale/1.1)} >{start_time}</text>
+        <text className="label" x={w} y={h*(1+scale/1.1)}>{end_time}</text>
     </g>
   )
 }

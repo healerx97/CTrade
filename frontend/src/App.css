@@ -3,15 +3,16 @@
 @tailwind utilities;
 
 
-.chart {
-  width: 1500px;
-  height: 100%;
+/* .chart {
   overflow: visible;
-}
+} */
 
 .label {
-  font-size: small;
-  font-weight:bold;
+  font-size: xx-small;
   color: white !important;
   font-family:Verdana, Geneva, Tahoma, sans-serif
+}
+
+.candleGroup:hover {
+  filter: grayscale(100%) sepia(100%);
 }

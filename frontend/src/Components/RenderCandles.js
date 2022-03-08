@@ -1,6 +1,7 @@
 import React from 'react'
 
 function RenderCandles({candleData, w, h, d, minH, ratio, scale}) {
+    
     return (candleData? (
       candleData?.map((can)=>{
           
@@ -17,8 +18,12 @@ function RenderCandles({candleData, w, h, d, minH, ratio, scale}) {
           let c2 = h-((close-minH)/d*h)
           let candleColor = open<close? 'rgb(0,0, 232)' : 'rgb(224, 53, 40)'
 
+          function handleCandleClick() {
+            console.log(can)
+        }
+
           return (
-          <g>
+          <g class='candleGroup' onClick={handleCandleClick}>
               <line x1={p1} y1={v1} x2={p1} y2={v2} style={{'stroke':'rgb(0,0,0)', 'strokeWidth':'2'}} />
               <line x1={p1} y1={c1} x2={p1} y2={c2} style={{'stroke':candleColor, 'strokeWidth':'5'}} />
           </g>
