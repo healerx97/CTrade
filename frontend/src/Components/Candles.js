@@ -29,13 +29,13 @@ function Candles({currentCoin, candleData, setCandleData}) {
         </div>
         <div class = 'border w-3/4 flex justify-center rounded shadow-lg bg-slate-50'>
             {/* SVG Graph */}
-            <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale*1.5)} ${parseInt(h*(1+scale*2))}`} class="chart p-10" vector-effect='non-scaling-stroke' onClick={()=> console.log('svg click')}>
+            <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale*1.5)} ${parseInt(h*(1+scale*2))}`} class="chart p-10" vector-effect='non-scaling-stroke'>
                     
                 {candleData? <RenderCandles
                     candleData={candleData} w={w} h={h} d={d} minH={minH} ratio={ratio} scale={scale} setCandleTime={setCandleTime}
                 /> : null}
                 {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} d={d} scale={scale} candleTime={candleTime} />: null}
-                {candleData && longWickVal ? <LongWick/> :null}
+                {candleData && longWickVal ? <LongWick candleData={candleData} ratio={ratio} h={h} d={d} minH={minH}/> :null}
             </svg>
             
             <div class='p-2 flex border'>
