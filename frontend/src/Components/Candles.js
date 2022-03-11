@@ -2,9 +2,12 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import RenderCandles from './RenderCandles'
 import RenderAxis from './RenderAxis'
+import LongWick from './LongWick'
 function Candles({currentCoin, candleData, setCandleData}) {
     let [ratio, setRatio] = useState(15)
     let [scale, setScale] = useState(0.3)
+    let [candleTime, setCandleTime] = useState('')
+    let [longWickVal, setLongWickVal] = useState(false)
     let w = ratio * candleData.length
     let minH = candleData? (
         Math.min.apply(Math, candleData.map(function(o) { return o.low }))
@@ -25,17 +28,20 @@ function Candles({currentCoin, candleData, setCandleData}) {
             {currentCoin.id}
         </div>
         <div class = 'border w-3/4 flex justify-center rounded shadow-lg bg-slate-50'>
-            <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale*2)} ${parseInt(h*(1+scale*2))}`} class="chart p-10" vector-effect='non-scaling-stroke'>
+            {/* SVG Graph */}
+            <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale*1.5)} ${parseInt(h*(1+scale*2))}`} class="chart p-10" vector-effect='non-scaling-stroke' onClick={()=> console.log('svg click')}>
                     
-                {candleData? <RenderCandles candleData={candleData} w={w} h={h} d={d} minH={minH} ratio={ratio} scale={scale}/> : null}
-                {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} d={d} scale={scale}/>: null}
-                
+                {candleData? <RenderCandles
+                    candleData={candleData} w={w} h={h} d={d} minH={minH} ratio={ratio} scale={scale} setCandleTime={setCandleTime}
+                /> : null}
+                {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} d={d} scale={scale} candleTime={candleTime} />: null}
+                {candleData && longWickVal ? <LongWick/> :null}
             </svg>
             
             <div class='p-2 flex border'>
                 <label class='font-bold'>
-                    <input class='p-1 mr-1' type='checkbox'></input>
-                    Volume
+                    <input class='p-1 mr-1' type='checkbox' onClick={()=>setLongWickVal(!longWickVal)}></input>
+                    Long Wick
                 </label>
             </div>
         </div>

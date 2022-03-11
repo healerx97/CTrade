@@ -1,10 +1,9 @@
-import React from 'react'
+import React, {useState} from 'react'
 
-function RenderCandles({candleData, w, h, d, minH, ratio, scale}) {
-    
+function RenderCandles({candleData, w, h, d, minH, ratio, scale, setCandleTime}) {
     return (candleData? (
       candleData?.map((can)=>{
-          
+          let show = false
           let low = can['low']
           let high = can['high']
           let open = can['open']
@@ -21,9 +20,9 @@ function RenderCandles({candleData, w, h, d, minH, ratio, scale}) {
           function handleCandleClick() {
             console.log(can)
         }
-
+        
           return (
-          <g class='candleGroup' onClick={handleCandleClick}>
+          <g class='candleGroup' onClick={handleCandleClick} onMouseEnter={(e)=> setCandleTime(can.time)} onMouseLeave={()=>setCandleTime('')}>
               <line x1={p1} y1={v1} x2={p1} y2={v2} style={{'stroke':'rgb(0,0,0)', 'strokeWidth':'2'}} />
               <line x1={p1} y1={c1} x2={p1} y2={c2} style={{'stroke':candleColor, 'strokeWidth':'5'}} />
           </g>
