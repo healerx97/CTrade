@@ -33,7 +33,7 @@ def getCandles(request):
         req_days = 30
         end_time = datetime.datetime.now().isoformat()[0:10]
         start_time = (parser.parse(end_time) - datetime.timedelta(req_days)).isoformat()[0:10]
-        granularity = '86400' #1day
+        granularity = param['tf'] #1day
         # 30 day candlesticks
         data = []
         headers = {"Accept": "application/json"}

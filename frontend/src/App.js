@@ -10,6 +10,7 @@ import Candles from './Components/Candles';
 function App() {
   let [candleData, setCandleData] = useState([])
   let [currentCoin, setCurrentCoin] = useState({})
+  let [curTimeFrame, setCurTimeFrame] = useState('1 day')
   const navigate = useNavigate()
   
 
@@ -17,8 +18,8 @@ function App() {
       <div className="App container mx-auto">
         <Navbar navigate={navigate}/>
         <Routes>
-          <Route path = '/allcoinpairs' element={<CoinPairs currentCoin={currentCoin} setCurrentCoin={setCurrentCoin} candleData={candleData} setCandleData={setCandleData} navigate={navigate}/>}/>
-          <Route path = '/candles' element={<Candles candleData={candleData} setCandleData={setCandleData} currentCoin={currentCoin}/>}/>
+          <Route path = '/allcoinpairs' element={<CoinPairs currentCoin={currentCoin} setCurrentCoin={setCurrentCoin} candleData={candleData} setCandleData={setCandleData} curTimeFrame={curTimeFrame} navigate={navigate}/>}/>
+          <Route path = '/candles' element={<Candles candleData={candleData} setCandleData={setCandleData} currentCoin={currentCoin} curTimeFrame={curTimeFrame} setCurTimeFrame={setCurTimeFrame}/>}/>
           <Route path = '/' element={<Home/>}/>
         </Routes>
 

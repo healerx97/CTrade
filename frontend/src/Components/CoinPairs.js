@@ -1,8 +1,16 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
-function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, navigate}) {
+function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curTimeFrame, navigate}) {
     let [coins, setCoins] = useState([])
+    let granularities= {
+        '1 min': '60',
+        '5 mins': '300',
+        '15 mins': '900',
+        '1 hr': '3600',
+        '6 hrs': '21600',
+        '1 day': '86400',
+    }
     React.useEffect(()=> {
         axios
         .get('/api/coins')
@@ -34,7 +42,8 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, navi
         e.preventDefault()
         setCurrentCoin(coin)
         let coinData = {
-            id: coin.id
+            id: coin.id,
+            tf: granularities[curTimeFrame]
         }
         fetch('http://localhost:8000/api/getCandles', {
         method: 'POST',

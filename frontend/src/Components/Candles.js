@@ -3,9 +3,19 @@ import axios from 'axios'
 import RenderCandles from './RenderCandles'
 import RenderAxis from './RenderAxis'
 import LongWick from './LongWick'
-function Candles({currentCoin, candleData, setCandleData}) {
+function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTimeFrame}) {
     let [ratio, setRatio] = useState(15)
     let [scale, setScale] = useState(0.3)
+    let [ddState, setddState] = useState(false)
+    let timeframes = ['1 min', '5 mins', '15 mins', '1 hr', '6 hrs', '1 day']
+    let granularities= {
+        '1 min': 60,
+        '5 mins': 300,
+        '15 mins': 900,
+        '1 hr': 3600,
+        '6 hrs': 21600,
+        '1 day': 86400,
+    }
     let [candleTime, setCandleTime] = useState('')
     let [longWickVal, setLongWickVal] = useState(false)
     let w = ratio * candleData.length
@@ -20,12 +30,39 @@ function Candles({currentCoin, candleData, setCandleData}) {
     ): 0
     let h = w/1.5
     
+    let renderDropDown = timeframes?.map((tf)=> {
+        return (
+            <li>
+                <button class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" onClick={()=> setCurTimeFrame(tf)}>{tf}</button>
+            </li>
+        )
+    })
+    React.useEffect(()=> {
+        let coinData = {
+            id: currentCoin.id,
+            tf: granularities[curTimeFrame]
+        }
+        fetch('http://localhost:8000/api/getCandles', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(coinData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            let temp = data.reverse()
+            setCandleData(temp)
+        })
+        .catch(error=>console.log(error))
+    },[curTimeFrame])
     
-
   return (
     <div class='flex flex-col items-center'>
-        <div class='text-xl font-bold p-3 border border-x-transparent bg-blue-100 rounded-xl shadow-md mb-2'>
-            {currentCoin.id}
+        <div class='flex flex-row justify-between'>
+            <div class='text-xl font-bold p-3 border border-x-transparent bg-blue-100 rounded-xl shadow-md mb-2'>
+                {currentCoin.id}
+            </div>
         </div>
         <div class = 'border w-3/4 flex justify-center rounded shadow-lg bg-slate-50'>
             {/* SVG Graph */}
@@ -43,6 +80,19 @@ function Candles({currentCoin, candleData, setCandleData}) {
                     <input class='p-1 mr-1' type='checkbox' onClick={()=>setLongWickVal(!longWickVal)}></input>
                     Long Wick
                 </label>
+            </div>
+        </div>
+        <div class='w-3/4'>
+            <div class='self-start'>
+                <button id="dropdownButton" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" onClick={()=>setddState(!ddState)}>{curTimeFrame}<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                {/* <!-- Dropdown menu --> */}
+                <div class={ddState?null:"hidden"}>
+                <div id="dropdown" class="z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
+                    <ul class="py-1">
+                        {renderDropDown}
+                    </ul>
+                </div>
+                </div>
             </div>
         </div>
     </div>
