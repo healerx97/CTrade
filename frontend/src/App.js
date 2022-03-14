@@ -14,7 +14,7 @@ function App() {
   
 
   return (   
-      <div className="App">
+      <div className="App container mx-auto">
         <Navbar navigate={navigate}/>
         <Routes>
           <Route path = '/allcoinpairs' element={<CoinPairs currentCoin={currentCoin} setCurrentCoin={setCurrentCoin} candleData={candleData} setCandleData={setCandleData} navigate={navigate}/>}/>

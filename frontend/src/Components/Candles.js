@@ -36,7 +36,7 @@ function Candles({currentCoin, candleData, setCandleData}) {
                 /> : null}
                 {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} d={d} scale={scale} candleTime={candleTime} />: null}
                 {candleData && longWickVal ? <LongWick candleData={candleData} ratio={ratio} h={h} d={d} minH={minH}/> :null}
-            </svg>
+            </svg> 
             
             <div class='p-2 flex border'>
                 <label class='font-bold'>

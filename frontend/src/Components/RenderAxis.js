@@ -12,10 +12,11 @@ function RenderAxis({candleData, minH, maxH, h, w, d, scale, candleTime}) {
         v: v,
       })
     }
+    let text_size = candleData.length > 70 ? 'large':'small'
     let renderCols = colArray?.map(({y_val, v})=>{
       return(
             <g>
-              <text className="label" x={-w*scale} y={y_val} text-anchor="start" alignmentBaseline='middle'>{parseFloat(v).toFixed(2)}</text>
+              <text className="label" x={-w*scale} y={y_val} text-anchor="start" alignmentBaseline='middle' style={{'fontSize':text_size}}>{parseFloat(v).toFixed(2)}</text>
               <line x1={-w*scale/2} y1={y_val} x2={w*(1+scale)} y2={y_val} style={{'stroke':'rgb(0,0,0)', 'stroke-width':'1', 'strokeOpacity': '0.3'}} />
             </g>
       )
@@ -40,8 +41,8 @@ function RenderAxis({candleData, minH, maxH, h, w, d, scale, candleTime}) {
 
     let renderRows = (
       <g>
-        <text className="label" x={0} y={h*(1+scale/3)} text-anchor="middle">{start_time}</text>
-        <text className="label" x={w} y={h*(1+scale/3)} text-anchor="middle">{end_time}</text>
+        <text className="label" x={0} y={h*(1+scale/3)} text-anchor="middle" style={{'fontSize':text_size}}>{start_time}</text>
+        <text className="label" x={w} y={h*(1+scale/3)} text-anchor="middle" style={{'fontSize':text_size}}>{end_time}</text>
       </g>
     )
 
@@ -49,7 +50,7 @@ function RenderAxis({candleData, minH, maxH, h, w, d, scale, candleTime}) {
     let curTimeFormat = candleTime? timeConverter(candleTime): null
     let curTimeX = curTimeFormat? (candleTime-startT)/(endT-startT)*w : 0
     let renderCurCandleTime = curTimeFormat && curTimeFormat!= end_time && curTimeFormat!= start_time? (
-      <text className="label" x={curTimeX} y={h*(1+scale/2)} text-anchor="middle" alignmentBaseline='middle'>{curTimeFormat}</text>
+      <text className="label" x={curTimeX} y={h*(1+scale/2)} text-anchor="middle" alignmentBaseline='middle' style={{'fontSize':text_size}}>{curTimeFormat}</text>
     ): null
 
 

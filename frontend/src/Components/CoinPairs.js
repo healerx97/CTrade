@@ -10,6 +10,18 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, navi
             if (res.status==200) {
                 let temp = res.data
                 temp = temp.filter(c=>c.quote == 'USD')
+                temp.sort(function (a,b) {
+                    const nameA = a.id.toUpperCase()
+                    const nameB = b.id.toUpperCase()
+                    if (nameA < nameB) {
+                        return -1;
+                      }
+                      if (nameA > nameB) {
+                        return 1;
+                      }
+                      // names must be equal
+                      return 0;
+                })
                 setCoins(temp)
             }
         })
@@ -40,9 +52,10 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, navi
     }
 
     let renderCoins = coins?.map((coin)=> {
+        let displayName= coin['id'].split('-')[0]
         return (    
-            <div className="border hover:bg-red-200" onClick={(e)=>handleCoinClick(coin, e)}>
-                {coin['id']}
+            <div className="border hover:bg-red-200 text-center text-xl p-2" onClick={(e)=>handleCoinClick(coin, e)}>
+                {displayName}
             </div>
         )
     })

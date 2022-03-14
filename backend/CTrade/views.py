@@ -30,19 +30,20 @@ def getCandles(request):
         param = request.data
         # starting params defined
         cur_id = param['id']
+        req_days = 30
         end_time = datetime.datetime.now().isoformat()[0:10]
-        start_time = (parser.parse(end_time) - datetime.timedelta(3)).isoformat()[0:10]
+        start_time = (parser.parse(end_time) - datetime.timedelta(req_days)).isoformat()[0:10]
         granularity = '86400' #1day
         # 30 day candlesticks
         data = []
         headers = {"Accept": "application/json"}
 
-        for i in range(20):
+        for i in range(2):
             url = f"https://api.exchange.coinbase.com/products/{cur_id}/candles?granularity={granularity}&start={start_time}&end={end_time}"
             response = requests.request("GET", url, headers=headers)
             data += response.json()
-            end_time = (parser.parse(end_time) - datetime.timedelta(3)).isoformat()[0:10]
-            start_time = (parser.parse(start_time) - datetime.timedelta(3)).isoformat()[0:10]
+            end_time = (parser.parse(end_time) - datetime.timedelta(req_days)).isoformat()[0:10]
+            start_time = (parser.parse(start_time) - datetime.timedelta(req_days)).isoformat()[0:10]
             
 
         
