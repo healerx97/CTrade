@@ -4,7 +4,6 @@ import axios from 'axios'
 function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curTimeFrame, navigate}) {
     let [coins, setCoins] = useState([])
     let granularities= {
-        '1 min': '60',
         '5 mins': '300',
         '15 mins': '900',
         '1 hr': '3600',

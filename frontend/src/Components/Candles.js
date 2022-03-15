@@ -7,14 +7,13 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
     let [ratio, setRatio] = useState(15)
     let [scale, setScale] = useState(0.3)
     let [ddState, setddState] = useState(false)
-    let timeframes = ['1 min', '5 mins', '15 mins', '1 hr', '6 hrs', '1 day']
+    let timeframes = ['5 mins', '15 mins', '1 hr', '6 hrs', '1 day']
     let granularities= {
-        '1 min': 60,
-        '5 mins': 300,
-        '15 mins': 900,
-        '1 hr': 3600,
-        '6 hrs': 21600,
-        '1 day': 86400,
+        '5 mins': '300',
+        '15 mins': '900',
+        '1 hr': '3600',
+        '6 hrs': '21600',
+        '1 day': '86400',
     }
     let [candleTime, setCandleTime] = useState('')
     let [longWickVal, setLongWickVal] = useState(false)
@@ -53,10 +52,11 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
         .then(data => {
             let temp = data.reverse()
             setCandleData(temp)
+            setddState(false)
         })
         .catch(error=>console.log(error))
     },[curTimeFrame])
-    
+
   return (
     <div class='flex flex-col items-center'>
         <div class='flex flex-row justify-between'>
