@@ -1,6 +1,6 @@
 import React from 'react'
 
-function RenderAxis({candleData, minH, maxH, h, w, d, scale, candleTime}) {
+function RenderAxis({candleData, minH, maxH, h, w, d, scale, candleTime, xOffSet}) {
     let numCol = 5
     //iterate each line of axis col, row
     let colArray = []
@@ -13,6 +13,9 @@ function RenderAxis({candleData, minH, maxH, h, w, d, scale, candleTime}) {
       })
     }
     let text_size = candleData.length > 70 ? 'large':'small'
+    if (candleData.length > 200) {
+      text_size = 'xxx-large'
+    }
     let renderCols = colArray?.map(({y_val, v})=>{
       return(
             <g>
@@ -60,7 +63,7 @@ function RenderAxis({candleData, minH, maxH, h, w, d, scale, candleTime}) {
         <line x1={-w*scale/2} y1={h*(1+scale/2)} x2={w*(1+scale)} y2={h*(1+scale/2)} style={{'stroke':'rgb(0,0,0)', 'stroke-width':'1'}} />
         <text className="label" x={-w*scale} y={h}>{minH}</text>
         <text className="label" x={-w*scale} y={0}>{maxH}</text> */}
-        {renderRows}
+        {xOffSet==0?renderRows:null}
         {renderCols}
         {renderCurCandleTime}
     </g>

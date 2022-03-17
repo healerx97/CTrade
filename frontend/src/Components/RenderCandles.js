@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-function RenderCandles({candleData, w, h, d, minH, ratio, scale, setCandleTime}) {
+function RenderCandles({candleData, w, h, d, minH, ratio, scale, setCandleTime, xOffSet}) {
     return (candleData? (
       candleData?.map((can)=>{
           let show = false
@@ -9,8 +9,8 @@ function RenderCandles({candleData, w, h, d, minH, ratio, scale, setCandleTime})
           let open = can['open']
           let close = can['close']
           let volume = can['volume']
-          
-          let p1 = (candleData.indexOf(can)*ratio)
+          // added xOffSet*ratio to x coordinates
+          let p1 = (candleData.indexOf(can)*ratio) + xOffSet*ratio
           let v1 = h-((low-minH)/d*h)
           let v2 = h-((high-minH)/d*h)
           let c1 = h-((open-minH)/d*h)

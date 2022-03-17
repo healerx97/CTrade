@@ -4,7 +4,7 @@ import RenderCandles from './RenderCandles'
 import RenderAxis from './RenderAxis'
 import LongWick from './LongWick'
 
-function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTimeFrame}) {
+function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTimeFrame, xOffSet, setXOffSet}) {
     let [ratio, setRatio] = useState(15)
     let [scale, setScale] = useState(0.3)
     let [ddState, setddState] = useState(false)
@@ -56,6 +56,7 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
             let temp = data.reverse()
             setCandleData(temp)
             setddState(false)
+            setXOffSet(0)
         })
         .catch(error=>console.log(error))
     },[curTimeFrame])
@@ -83,6 +84,8 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
 
 
     // ---------------------------------------------------------------------------------------------------
+
+
     
   return (
     <div class='flex flex-col items-center'>
@@ -96,9 +99,9 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
             <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale*1.5)} ${parseInt(h*(1+scale*2))}`} class="chart p-10" vector-effect='non-scaling-stroke' >
                     
                 {candleData? <RenderCandles
-                    candleData={candleData} w={w} h={h} d={d} minH={minH} ratio={ratio} scale={scale} setCandleTime={setCandleTime}
+                    candleData={candleData} w={w} h={h} d={d} minH={minH} ratio={ratio} scale={scale} setCandleTime={setCandleTime} xOffSet={xOffSet}
                 /> : null}
-                {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} d={d} scale={scale} candleTime={candleTime} />: null}
+                {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} d={d} scale={scale} candleTime={candleTime} xOffSet={xOffSet}/>: null}
                 {candleData && longWickVal ? <LongWick candleData={candleData} ratio={ratio} h={h} d={d} minH={minH}/> :null}
             </svg> 
             

@@ -16,13 +16,16 @@ function App() {
   let [curTimeFrame, setCurTimeFrame] = useState('1 day')
   let [xOffSet, setXOffSet] = useState(0)
   const navigate = useNavigate()
-  
-  let rightArrow = 39
     function svgHorizontal(e) {
+        let maxOff = candleData?.length
         if (e.keyCode == 37) {
-          console.log('left')
+          if (xOffSet>= -maxOff) {
+            setXOffSet(xOffSet-1)
+          }
         } else if (e.keyCode == 39) {
-          console.log('right')
+          if (xOffSet<= maxOff) {
+            setXOffSet(xOffSet+1)
+          }
         }
     }
 
@@ -33,7 +36,7 @@ function App() {
         <Navbar navigate={navigate}/>
         <Routes>
           <Route path = '/allcoinpairs' element={<CoinPairs currentCoin={currentCoin} setCurrentCoin={setCurrentCoin} candleData={candleData} setCandleData={setCandleData} curTimeFrame={curTimeFrame} navigate={navigate}/>}/>
-          <Route path = '/candles' element={<Candles candleData={candleData} setCandleData={setCandleData} currentCoin={currentCoin} curTimeFrame={curTimeFrame} setCurTimeFrame={setCurTimeFrame} xOffSet={xOffSet}/>}/>
+          <Route path = '/candles' element={<Candles candleData={candleData} setCandleData={setCandleData} currentCoin={currentCoin} curTimeFrame={curTimeFrame} setCurTimeFrame={setCurTimeFrame} xOffSet={xOffSet} setXOffSet={setXOffSet}/>}/>
           <Route path = '/' element={<Home/>}/>
         </Routes>
 
