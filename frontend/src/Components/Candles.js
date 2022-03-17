@@ -3,6 +3,7 @@ import axios from 'axios'
 import RenderCandles from './RenderCandles'
 import RenderAxis from './RenderAxis'
 import LongWick from './LongWick'
+
 function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTimeFrame}) {
     let [ratio, setRatio] = useState(15)
     let [scale, setScale] = useState(0.3)
@@ -32,7 +33,9 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
     let renderDropDown = timeframes?.map((tf)=> {
         return (
             <li>
-                <button class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" onClick={()=> setCurTimeFrame(tf)}>{tf}</button>
+                <div class={curTimeFrame==tf?'bg-yellow-200':null}>
+                <button class="block py-2 px-4 w-full text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" onClick={()=> setCurTimeFrame(tf)}>{tf}</button>
+                </div>
             </li>
         )
     })
@@ -56,7 +59,31 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
         })
         .catch(error=>console.log(error))
     },[curTimeFrame])
+    // --------------------------------------------------------------------------------------------------
+    // scrolling function
+    const [scrollY, setScrollY] = useState(0);
+    function handleScroll() {
+        if (scrollY>window.scrollY) {
+            console.log('up')
+        } else {
+            console.log('down')
+        }
+        setScrollY(window.scrollY)
+    }
+    React.useEffect(() => {
+        function watchScroll() {
+          window.addEventListener("scroll", handleScroll);
+        }
+        watchScroll();
+    
+        return () => {
+          window.removeEventListener("scroll", handleScroll);
+        };
+      }, []);
 
+
+    // ---------------------------------------------------------------------------------------------------
+    
   return (
     <div class='flex flex-col items-center'>
         <div class='flex flex-row justify-between'>
@@ -66,7 +93,7 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
         </div>
         <div class = 'border w-3/4 flex justify-center rounded shadow-lg bg-slate-50'>
             {/* SVG Graph */}
-            <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale*1.5)} ${parseInt(h*(1+scale*2))}`} class="chart p-10" vector-effect='non-scaling-stroke'>
+            <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale*1.5)} ${parseInt(h*(1+scale*2))}`} class="chart p-10" vector-effect='non-scaling-stroke' >
                     
                 {candleData? <RenderCandles
                     candleData={candleData} w={w} h={h} d={d} minH={minH} ratio={ratio} scale={scale} setCandleTime={setCandleTime}
@@ -79,15 +106,16 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
                 <label class='font-bold'>
                     <input class='p-1 mr-1' type='checkbox' onClick={()=>setLongWickVal(!longWickVal)}></input>
                     Long Wick
+                    {scrollY}
                 </label>
             </div>
         </div>
         <div class='w-3/4'>
-            <div class='self-start'>
-                <button id="dropdownButton" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" onClick={()=>setddState(!ddState)}>{curTimeFrame}<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+            <div class='self-start w-28'>
+                <button id="dropdownButton" class="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" onClick={()=>setddState(!ddState)}>{curTimeFrame}<svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                 {/* <!-- Dropdown menu --> */}
                 <div class={ddState?null:"hidden"}>
-                <div id="dropdown" class="z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
+                <div id="dropdown" class="z-10 w-full text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
                     <ul class="py-1">
                         {renderDropDown}
                     </ul>
