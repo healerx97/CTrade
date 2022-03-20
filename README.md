@@ -1,13 +1,14 @@
 # CTrade
-- Crypto Trading Strategy Visualizer
+> Crypto Trading Strategy Visualizer
 
 
-*To Do
+
+### To Do
 - Search Func
 - Zoom In/Out
 - 
 
-Patterns/Algo
+### Patterns/Algo
 - Bullish Engulfing
 - Trend lines
 - consecutive direction
