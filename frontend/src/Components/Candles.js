@@ -53,8 +53,7 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
         })
         .then(response => response.json())
         .then(data => {
-            let temp = data.reverse()
-            setCandleData(temp)
+            setCandleData(data)
             setddState(false)
             setXOffSet(0)
         })

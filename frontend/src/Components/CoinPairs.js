@@ -53,8 +53,7 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curT
         })
         .then(response => response.json())
         .then(data => {
-            let temp = data.reverse()
-            setCandleData(temp)
+            setCandleData(data)
         })
         navigate('/candles')
     }
