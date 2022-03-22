@@ -15,7 +15,7 @@ import datetime
 from dateutil import parser
 import pandas as pd
 import numpy as np
-
+import talib
 
 # Create your views here.
 
@@ -57,7 +57,8 @@ def getCandles(request):
         
         df = pd.DataFrame(data, columns = ['time', 'low', 'high', 'open', 'close', 'volume'])
         df = df.drop_duplicates()
-        jsonDF = df[::-1].to_json(orient='records')
+        df = df[::-1]
+        jsonDF = df.to_json(orient='records')
         # df.to_csv('output.csv')
 
         return JsonResponse(json.loads(jsonDF), safe = False)
@@ -80,4 +81,43 @@ def importCoinPairs(request):
             newObjList.append(newobj.getID())
     return JsonResponse(newObjList, safe=False)
 
-    
+
+@api_view(('POST',))
+def testTalib(request):
+    if request.method == "POST":
+        param = request.data
+        # starting params defined
+        cur_id = param['id']
+        granularity = param['tf']
+        candles = param['candleData']
+        # fetch params dictionary
+        # {key: [req_days, range]}
+        pDict = {
+            '300': 1,
+            '900': 3,
+            '3600': 5,
+            '21600': 60,
+            '86400': 90,
+        }
+        # req_days = pDict[granularity]
+        # end_time = datetime.datetime.now().isoformat()[0:10]
+        # start_time = (parser.parse(end_time) - datetime.timedelta(req_days)).isoformat()[0:10]
+        # data = []
+        # headers = {"Accept": "application/json"}
+        
+        # for i in range(1):
+        #     url = f"https://api.exchange.coinbase.com/products/{cur_id}/candles?granularity={granularity}&start={start_time}&end={end_time}"
+        #     response = requests.request("GET", url, headers=headers)
+        #     data += response.json()
+        #     end_time = (parser.parse(end_time) - datetime.timedelta(req_days)).isoformat()[0:10]
+        #     start_time = (parser.parse(start_time) - datetime.timedelta(req_days)).isoformat()[0:10]
+            
+
+        
+        df = pd.DataFrame(candles, columns = ['time', 'low', 'high', 'open', 'close', 'volume'])
+        df = df.drop_duplicates()
+        num = talib.CDLENGULFING(df['open'], df['high'], df['low'], df['close'])
+        jsonDF = num.to_json(orient='records')
+        # df.to_csv('output.csv')
+
+        return JsonResponse(json.loads(jsonDF), safe = False)

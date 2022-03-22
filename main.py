@@ -6,6 +6,7 @@ from dateutil import parser
 import pandas as pd
 import numpy as np
 import json
+import talib
 key = os.getenv('API_KEY')
 secret = os.getenv('API_SECRET')
 pp = os.getenv('PASSPHRASE')
@@ -40,6 +41,9 @@ def trade_crypto(request):
     # df.to_csv('output.csv')
 
     return 'hello'
+
+
+
 
 
 # pull in candle stats 2days at a time  x 15

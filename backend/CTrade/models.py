@@ -12,3 +12,7 @@ class Coin(models.Model):
 
     def getID(self):
         return self.id
+
+class Pattern(models.Model):
+    name = models.TextField()
+    key = models.TextField()

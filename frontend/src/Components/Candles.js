@@ -83,7 +83,25 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
 
 
     // ---------------------------------------------------------------------------------------------------
-
+    React.useEffect(()=> {
+        let coinData = {
+            id: currentCoin.id,
+            tf: granularities[curTimeFrame],
+            candleData: candleData
+        }
+        fetch('http://localhost:8000/api/testTalib', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(coinData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+        })
+        .catch(error=>console.log(error))
+    },[candleData])
 
     
   return (
@@ -108,7 +126,6 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
                 <label class='font-bold'>
                     <input class='p-1 mr-1' type='checkbox' onClick={()=>setLongWickVal(!longWickVal)}></input>
                     Long Wick
-                    {scrollY}
                 </label>
             </div>
         </div>
