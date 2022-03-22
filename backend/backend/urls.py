@@ -20,7 +20,7 @@ from CTrade import views
 
 router = routers.DefaultRouter()
 router.register(r'coins', views.CTView, 'CTrade')
-
+router.register(r'patterns', views.TradePatterns, 'CTrade')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),

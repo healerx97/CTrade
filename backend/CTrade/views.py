@@ -8,7 +8,9 @@ from django.http import request
 from django.http.response import HttpResponse, JsonResponse
 import json
 from .serializers import CoinsSerializer
+from .serializers import PatternsSerializer
 from .models import Coin
+from .models import Pattern
 
 import requests
 import datetime
@@ -22,6 +24,10 @@ import talib
 class CTView(viewsets.ModelViewSet):
     serializer_class = CoinsSerializer
     queryset = Coin.objects.all()
+
+class TradePatterns(viewsets.ModelViewSet):
+    serializer_class = PatternsSerializer
+    queryset = Pattern.objects.all()
 
 
 @api_view(('POST',))
@@ -81,6 +87,11 @@ def importCoinPairs(request):
             newObjList.append(newobj.getID())
     return JsonResponse(newObjList, safe=False)
 
+patternDataPath = 'backend/PatternData.csv'
+@api_view(('GET',))
+def importPatterns(request):
+    pattern_data_df = pd.read_csv(patternDataPath, low_memory=False)
+    
 
 @api_view(('POST',))
 def testTalib(request):
