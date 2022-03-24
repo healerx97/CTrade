@@ -14,5 +14,10 @@ class Coin(models.Model):
         return self.id
 
 class Pattern(models.Model):
+
     name = models.TextField()
     key = models.TextField()
+    penetration = models.BooleanField(default=False)
+
+    def getKey(self):
+        return self.key

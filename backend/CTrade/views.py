@@ -12,6 +12,7 @@ from .serializers import PatternsSerializer
 from .models import Coin
 from .models import Pattern
 
+import csv
 import requests
 import datetime
 from dateutil import parser
@@ -87,10 +88,21 @@ def importCoinPairs(request):
             newObjList.append(newobj.getID())
     return JsonResponse(newObjList, safe=False)
 
-patternDataPath = 'backend/PatternData.csv'
+patternDataPath = './CTrade/PatternData.csv'
 @api_view(('GET',))
 def importPatterns(request):
-    pattern_data_df = pd.read_csv(patternDataPath, low_memory=False)
+    newObjList = []
+    with open(patternDataPath, 'r') as csvfile:
+        patterns = csv.reader(csvfile)
+        for row in patterns:
+            if not Pattern.objects.filter(key=row[1]):
+                if row[2]:
+                    newObj = Pattern.objects.create(name = row[0], key = row[1], penetration = True)
+                else:
+                    newObj = Pattern.objects.create(name = row[0], key = row[1])
+                newObjList.append(newObj.getKey())
+    return JsonResponse(newObjList, safe=False)
+    
     
 
 @api_view(('POST',))

@@ -9,4 +9,4 @@ class CoinsSerializer(serializers.ModelSerializer):
 class PatternsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pattern
-        fields = ('id', 'name', 'key')
+        fields = ('id', 'name', 'key', 'penetration')
