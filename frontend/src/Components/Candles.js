@@ -8,6 +8,7 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
     let [ratio, setRatio] = useState(15)
     let [scale, setScale] = useState(0.3)
     let [ddState, setddState] = useState(false)
+    let [patternList, setPatternList] = useState([])
     let timeframes = ['5 mins', '15 mins', '1 hr', '6 hrs', '1 day']
     let granularities= {
         '5 mins': '300',
@@ -83,6 +84,7 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
 
 
     // ---------------------------------------------------------------------------------------------------
+    // fetch talib every time candleData changes
     React.useEffect(()=> {
         let coinData = {
             id: currentCoin.id,
@@ -102,6 +104,28 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
         })
         .catch(error=>console.log(error))
     },[candleData])
+    // ---------------------------------------------------------------------------------------------------
+    // render dropdown options for patterns
+    React.useEffect(()=> {
+        axios
+        .get('/api/patterns')
+        .then((res)=> {
+            if (res.status ==200) {
+                setPatternList(res.data)
+
+            }
+        })
+        .catch((error)=> console.log(error))
+
+    },[])
+    let renderPatternOptions = patternList? (
+        patternList?.map((pat)=> {
+            return (
+                <option value={pat.id}>{pat.name}</option>
+            )
+        })
+    ) : null
+
 
     
   return (
@@ -122,11 +146,16 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
                 {candleData && longWickVal ? <LongWick candleData={candleData} ratio={ratio} h={h} d={d} minH={minH}/> :null}
             </svg> 
             
-            <div class='p-2 flex border'>
-                <label class='font-bold'>
+            <div class='p-2 border'>
+                {/* <label class='font-bold'>
                     <input class='p-1 mr-1' type='checkbox' onClick={()=>setLongWickVal(!longWickVal)}></input>
                     Long Wick
-                </label>
+                </label> */}
+                <label for="patterns">Pattern Analysis:</label>
+
+                <select name="patterns" id="pt" onChange={(e)=>console.log(e.target.value)}>
+                    {renderPatternOptions}
+                </select>
             </div>
         </div>
         <div class='w-3/4'>
