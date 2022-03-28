@@ -3,12 +3,15 @@ import axios from 'axios'
 import RenderCandles from './RenderCandles'
 import RenderAxis from './RenderAxis'
 import LongWick from './LongWick'
+import PatternDisplay from './PatternDisplay'
 
 function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTimeFrame, xOffSet, setXOffSet}) {
     let [ratio, setRatio] = useState(15)
     let [scale, setScale] = useState(0.3)
     let [ddState, setddState] = useState(false)
     let [patternList, setPatternList] = useState([])
+    let [patternData, setPatternData] = useState([])
+    let [curPattern, setCurPattern] = useState(0)
     let timeframes = ['5 mins', '15 mins', '1 hr', '6 hrs', '1 day']
     let granularities= {
         '5 mins': '300',
@@ -87,9 +90,8 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
     // fetch talib every time candleData changes
     React.useEffect(()=> {
         let coinData = {
-            id: currentCoin.id,
-            tf: granularities[curTimeFrame],
-            candleData: candleData
+            candleData: candleData,
+            patternID: curPattern
         }
         fetch('http://localhost:8000/api/testTalib', {
         method: 'POST',
@@ -100,10 +102,10 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            setPatternData(data)
         })
         .catch(error=>console.log(error))
-    },[candleData])
+    },[candleData, curPattern])
     // ---------------------------------------------------------------------------------------------------
     // render dropdown options for patterns
     React.useEffect(()=> {
@@ -125,7 +127,7 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
             )
         })
     ) : null
-
+    
 
     
   return (
@@ -144,16 +146,17 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
                 /> : null}
                 {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} d={d} scale={scale} candleTime={candleTime} xOffSet={xOffSet}/>: null}
                 {candleData && longWickVal ? <LongWick candleData={candleData} ratio={ratio} h={h} d={d} minH={minH}/> :null}
+                {candleData && patternData ? <PatternDisplay patternData={patternData} candleData={candleData}/> : null}
             </svg> 
             
-            <div class='p-2 border'>
+            <div class='p-2 border flex-col flex w-56'>
                 {/* <label class='font-bold'>
                     <input class='p-1 mr-1' type='checkbox' onClick={()=>setLongWickVal(!longWickVal)}></input>
                     Long Wick
                 </label> */}
                 <label for="patterns">Pattern Analysis:</label>
 
-                <select name="patterns" id="pt" onChange={(e)=>console.log(e.target.value)}>
+                <select name="patterns" id="pt" onChange={(e)=>setCurPattern(e.target.value)}>
                     {renderPatternOptions}
                 </select>
             </div>
