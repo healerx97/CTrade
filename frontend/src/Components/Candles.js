@@ -128,7 +128,6 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
         })
     ) : null
     
-
     
   return (
     <div class='flex flex-col items-center'>
@@ -146,7 +145,7 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
                 /> : null}
                 {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} d={d} scale={scale} candleTime={candleTime} xOffSet={xOffSet}/>: null}
                 {candleData && longWickVal ? <LongWick candleData={candleData} ratio={ratio} h={h} d={d} minH={minH}/> :null}
-                {candleData && patternData ? <PatternDisplay patternData={patternData} candleData={candleData}/> : null}
+                {candleData && patternData ? <PatternDisplay patternData={patternData} candleData={candleData} ratio={ratio} h={h} d={d} minH={minH}/> : null}
             </svg> 
             
             <div class='p-2 border flex-col flex w-56'>
