@@ -1,9 +1,13 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import RenderCandles from './RenderCandles'
 import RenderAxis from './RenderAxis'
 import LongWick from './LongWick'
 import PatternDisplay from './PatternDisplay'
+
+import {INITIAL_VALUE, ReactSVGPanZoom, TOOL_NONE, fitSelection, zoomOnViewerCenter, fitToViewer} from 'react-svg-pan-zoom';
+import {useWindowSize} from '@react-hook/window-size'
+
 
 function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTimeFrame, xOffSet, setXOffSet}) {
     let [ratio, setRatio] = useState(15)
@@ -34,6 +38,23 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
     ): 0
     let h = w/1.5
     
+    // -------------------------------------SVG Zoom/Pan
+    // const Viewer = useRef(null);
+
+    // useEffect(() => {
+    //     Viewer.current.fitToViewer();
+    // }, []);
+
+    // const _zoomOnViewerCenter = () => Viewer.current.zoomOnViewerCenter(1.1)
+    // const _fitSelection = () => Viewer.current.fitSelection(40, 40, 200, 200)
+    // const _fitToViewer = () => Viewer.current.fitToViewer()
+
+    // const [width, height] = useWindowSize({initialWidth: 400, initialHeight: 400})
+
+    // const [tool, setTool] = useState(TOOL_NONE)
+    // const [value, setValue] = useState(INITIAL_VALUE)
+// -----------------------------------------------------------------------------------
+
     let renderDropDown = timeframes?.map((tf)=> {
         return (
             <li>
@@ -138,15 +159,24 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
         </div>
         <div class = 'border w-3/4 flex justify-center rounded shadow-lg bg-slate-50'>
             {/* SVG Graph */}
-            <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale*1.5)} ${parseInt(h*(1+scale*2))}`} class="chart p-10" vector-effect='non-scaling-stroke' >
-                    
+
+            {/* <hr/>
+
+            <button className="btn" onClick={() => _zoomOnViewerCenter()}>Zoom on center</button>
+            <button className="btn" onClick={() => _fitSelection()}>Zoom area 200x200</button>
+            <button className="btn" onClick={() => _fitToViewer()}>Fit</button>
+            <hr/> */}
+            
+            <svg viewBox= {`-${w*scale} -${h*scale} ${w*(1+scale*1.5)} ${parseInt(h*(1+scale*2))}`} class="chart p-10" vector-effect='non-scaling-stroke' > 
                 {candleData? <RenderCandles
                     candleData={candleData} w={w} h={h} d={d} minH={minH} ratio={ratio} scale={scale} setCandleTime={setCandleTime} xOffSet={xOffSet}
                 /> : null}
+
                 {candleData? <RenderAxis candleData={candleData} minH={minH} maxH={maxH} w={w} h={h} d={d} scale={scale} candleTime={candleTime} xOffSet={xOffSet}/>: null}
                 {candleData && longWickVal ? <LongWick candleData={candleData} ratio={ratio} h={h} d={d} minH={minH}/> :null}
                 {candleData && patternData ? <PatternDisplay patternData={patternData} candleData={candleData} ratio={ratio} h={h} d={d} minH={minH}/> : null}
-            </svg> 
+            </svg>
+
             
             <div class='p-2 border flex-col flex w-56'>
                 {/* <label class='font-bold'>
