@@ -2,6 +2,11 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
 function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curTimeFrame, navigate}) {
+    // ALPACA AUTH
+    let API_KEY = process.env.REACT_APP_ALPACA_API_ID
+    let SECRET_KEY = process.env.REACT_APP_ALPACA_API_SECRET
+
+
     let [coins, setCoins] = useState([])
     let granularities= {
         '5 mins': '300',
@@ -10,6 +15,7 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curT
         '6 hrs': '21600',
         '1 day': '86400',
     }
+    const [timeFrame, setTimeFrame] = useState('1Min')
     React.useEffect(()=> {
         axios
         .get('/api/coins')
@@ -37,25 +43,39 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curT
           })
         },[])
     
+    
+    
+    
+    
     function handleCoinClick(coin,e) {
         e.preventDefault()
         setCurrentCoin(coin)
-        let coinData = {
-            id: coin.id,
-            tf: granularities[curTimeFrame]
-        }
-        fetch('http://localhost:8000/api/getCandles', {
-        method: 'POST',
+        let start = new Date(Date.now() - (7200 * 1000)).toISOString()
+        let coinID = coin? coin.base+coin.quote: null
+        let base_url = `https://data.alpaca.markets/v1beta1/crypto/${coinID}/bars?exchanges=CBSE&timeframe=${timeFrame}&start=${start}`
+        console.log(coinID)
+        fetch(base_url, {
+        method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
+            'APCA-API-KEY-ID': API_KEY,
+            'APCA-API-SECRET-KEY': SECRET_KEY
         },
-        body: JSON.stringify(coinData),
         })
         .then(response => response.json())
-        .then(data => {
+        .then(res => {
+            let data = res.bars.map(bar => (
+                {
+                    open: bar.o,
+                    high: bar.h,
+                    low: bar.l,
+                    close: bar.c,
+                    time: Date.parse(bar.t) / 1000
+                }
+            ))
+            
             setCandleData(data)
         })
-        navigate('/candles')
+        navigate('/')
     }
 
     let renderCoins = coins?.map((coin)=> {

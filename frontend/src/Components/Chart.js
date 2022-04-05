@@ -2,8 +2,24 @@ import React, {useEffect, useRef} from 'react'
 import {createChart} from 'lightweight-charts'
 
 function Chart({data}) {
+      // ALPACA STREAM CREDENTIALS
+    let key = process.env.REACT_APP_ALPACA_API_ID
+    let secret = process.env.REACT_APP_ALPACA_API_SECRET
+
+    const stream_url = 'wss://stream.data.alpaca.markets/v1beta1/crypto'
+    const socket = new WebSocket(stream_url)
+    const auth = {'action':'auth', 'key': key, 'secret': secret}
+
+    
+
+
+    const subscribe = {"action":"subscribe", "trades":["ETHUSD"], "quotes":["ETHUSD"], "bars":["ETHUSD"]}
+
+    const unsubscribe = {"action": "unsubscribe", "trades":["ETHUSD"], "quotes":["ETHUSD"], "bars":["ETHUSD"]}
+    
+    let currentBar = data? data[data.length -1] : {}
+    let trades = []
     let chartContainerRef = React.useRef();
-    console.log(data)
     useEffect(
 		() => {
 			const handleResize = () => {
@@ -41,7 +57,69 @@ function Chart({data}) {
                       wickDownColor: 'rgb(255,82,82)',
                       borderVisible: false,
                 });
-              series.setData(data);
+              
+              if (data) {
+                series.setData(data);
+                socket.onmessage = function(event) {
+                  let data = JSON.parse(event.data)
+                //   console.log(data)
+                  const message = data[0]['msg'];
+                  if (message =='connected') {
+                    console.log('authentication')
+                    socket.send(JSON.stringify(auth))
+                  }
+                  if (message == 'authenticated') {
+                    socket.send(JSON.stringify(subscribe));
+                    // socket.close()
+                }
+                  for (var key in data) {
+          
+                    const type = data[key].T;
+          
+                    if (type == 't') {
+                        //console.log('got a trade');
+                        //console.log(data[key]);
+          
+                        trades.push(data[key].p);
+                        
+                        var open = trades[0];
+                        var high = Math.max(...trades);
+                        var low = Math.min(...trades);
+                        var close = trades[trades.length - 1];
+          
+                        // console.log(open, high, low, close);
+          
+                        series.update({
+                            time: currentBar.time + 60,
+                            open: open,
+                            high: high,
+                            low: low,
+                            close: close
+                        })
+                    }
+          
+                    if (type == 'b' && data[key].x == 'CBSE') {
+                        console.log('got a new bar');
+                        console.log(data[key]);
+          
+                        var bar = data[key];
+                        var timestamp = new Date(bar.t).getTime() / 1000;
+          
+                        currentBar = {
+                            time: timestamp,
+                            open: bar.o,
+                            high: bar.h,
+                            low: bar.l,
+                            close: bar.c
+                        }
+          
+                        series.update(currentBar);
+                        
+                        trades = [];
+                    }
+                }
+              }
+            }
               
             //   var datesForMarkers = [data[data.length - 39], data[data.length - 19]];
             //   var indexOfMinPrice = 0;
