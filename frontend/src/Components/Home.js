@@ -1,50 +1,65 @@
 import React from 'react'
+import axios from 'axios'
 import { useEffect, useState } from 'react'
 import Chart from './Chart'
-function Home({candleData}) {
+function Home({candleData, curPattern, setCurPattern, patternData, setPatternData}) {
   const [chartData, setChartData] = useState([])
-
-  // ALPACA STREAM CREDENTIALS
-  let key = process.env.REACT_APP_ALPACA_API_ID
-  let secret = process.env.REACT_APP_ALPACA_API_SECRET
-
-  const stream_url = 'wss://stream.data.alpaca.markets/v1beta1/crypto'
-  const socket = new WebSocket(stream_url)
-  const auth = {'action':'auth', 'key': key, 'secret': secret}
-
-  
+  let [patternList, setPatternList] = useState([])
 
 
-  const subscribe = {"action":"subscribe", "trades":["ETHUSD"], "quotes":["ETHUSD"], "bars":["ETHUSD"]}
+   useEffect(()=> {
+        axios
+        .get('/api/patterns')
+        .then((res)=> {
+            if (res.status ==200) {
+                setPatternList(res.data)
 
-  const unsubscribe = {"action": "unsubscribe", "trades":["ETHUSD"], "quotes":["ETHUSD"], "bars":["ETHUSD"]}
-  
-  let currentBar = candleData? candleData[candleData.length -1] : {}
-  let trades = []
+            }
+        })
+        .catch((error)=> console.log(error))
 
-  useEffect(()=> {
-    // let temp = candleData?.map((can)=> {
-    //   let t = parseInt(can['time'])
-    //   let date = new Date(t*1000)
-    //   let time = date.getTime() / 1000
-    //   return ({
-    //     time: time,
-    //     open: can['open'],
-    //     high: can['high'],
-    //     low: can['low'],
-    //     close: can['close'],
-    //   })
-    // })
+    },[])
+    // fetch talib every time candleData changes
+      React.useEffect(()=> {
+        let coinData = {
+            candleData: candleData,
+            patternID: curPattern
+        }
+        fetch('http://localhost:8000/api/testTalib', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(coinData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            setPatternData(data)
+        })
+        .catch(error=>console.log(error))
+    },[candleData, curPattern])
+    // ---------------------------------------------------------------------------------------------------
 
-   },[candleData])
+
+    let renderPatternOptions = patternList? (
+        patternList?.map((pat)=> {
+            return (
+                <option value={pat.id}>{pat.name}</option>
+            )
+        })
+    ) : null
 
   return (
     <div class ='container mx-auto'>
         <div className='body flex items-center w-full bg-blue-50'>
-            {candleData?<Chart data = {candleData}/> :null}
-            <button class='' onClick={()=>socket.send(JSON.stringify(unsubscribe))}>
-              Let's Go
-            </button>
+            {<Chart candleData = {candleData} patternData={patternData}/>}
+            <div class='p-2 border flex-col flex w-56'>
+                <label for="patterns">Pattern Analysis:</label>
+
+                <select name="patterns" id="pt" onChange={(e)=>setCurPattern(e.target.value)}>
+                    {renderPatternOptions}
+                </select>
+            </div>
         </div>
         
     </div>

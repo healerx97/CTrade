@@ -179,10 +179,6 @@ function Candles({currentCoin, candleData, setCandleData, curTimeFrame, setCurTi
 
             
             <div class='p-2 border flex-col flex w-56'>
-                {/* <label class='font-bold'>
-                    <input class='p-1 mr-1' type='checkbox' onClick={()=>setLongWickVal(!longWickVal)}></input>
-                    Long Wick
-                </label> */}
                 <label for="patterns">Pattern Analysis:</label>
 
                 <select name="patterns" id="pt" onChange={(e)=>setCurPattern(e.target.value)}>

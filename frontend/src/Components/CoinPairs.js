@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
-function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curTimeFrame, navigate}) {
+function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curTimeFrame, setCurPattern, navigate}) {
     // ALPACA AUTH
     let API_KEY = process.env.REACT_APP_ALPACA_API_ID
     let SECRET_KEY = process.env.REACT_APP_ALPACA_API_SECRET
@@ -72,8 +72,9 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curT
                     time: Date.parse(bar.t) / 1000
                 }
             ))
-            
+            console.log(data)
             setCandleData(data)
+            setCurPattern(62)
         })
         navigate('/')
     }
