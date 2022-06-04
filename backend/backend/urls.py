@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/getCandles', views.getCandles),
     path('api/testTalib', views.testTalib),
+    path('api/overallPatterns', views.overallPatterns),
     path('importCoinPairs/', views.importCoinPairs),
     path('importPatterns/', views.importPatterns)
 ]

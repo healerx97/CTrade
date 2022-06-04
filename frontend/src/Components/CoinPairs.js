@@ -15,7 +15,7 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curT
         '6 hrs': '21600',
         '1 day': '86400',
     }
-    const [timeFrame, setTimeFrame] = useState('1Min')
+    const [timeFrame, setTimeFrame] = useState('5Min')
     React.useEffect(()=> {
         axios
         .get('/api/coins')
@@ -50,7 +50,7 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curT
     function handleCoinClick(coin,e) {
         e.preventDefault()
         setCurrentCoin(coin)
-        let start = new Date(Date.now() - (7200 * 1000)).toISOString()
+        let start = new Date(Date.now() - (7200 * 1000 *5)).toISOString()
         let coinID = coin? coin.base+coin.quote: null
         let base_url = `https://data.alpaca.markets/v1beta1/crypto/${coinID}/bars?exchanges=CBSE&timeframe=${timeFrame}&start=${start}`
         console.log(coinID)

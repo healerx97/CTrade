@@ -3,14 +3,11 @@ import {createChart, ColorType} from 'lightweight-charts'
 
 function Chart({candleData, patternData}) {
     let chartContainerRef = React.useRef();
+    let chart
     useEffect(
 		() => {
-      const handleResize = () => {
-				chart.applyOptions({ width: chartContainerRef.current.clientWidth });
-			};
-
 			const chart = createChart(chartContainerRef.current, {
-				width: 1000,
+				width: 800,
         height: 500,
         timeScale: {
             timeVisible: true,
@@ -42,7 +39,7 @@ function Chart({candleData, patternData}) {
       series.setData(candleData)
       
 
-			window.addEventListener('resize', handleResize);
+			
       
       // add markers
       let markers = []
@@ -66,14 +63,23 @@ function Chart({candleData, patternData}) {
 
 
 			return () => {
-				window.removeEventListener('resize', handleResize);
+				
 				chart.remove();
 			};
     },[candleData, patternData]
 	);
+    useEffect(()=> {
+      const handleResize = () => {
+				chart.applyOptions({ width: chartContainerRef.current.clientWidth });
+			};
+      window.addEventListener('resize', handleResize);
+      return ()=> {
+        window.removeEventListener('resize', handleResize);
+      }
+    },[])
     
   return (
-    <div class='w-full p-4 justify-self-center self-center'
+    <div class='p-4 justify-self-center self-center'
 	    ref={chartContainerRef} id = 'chart'
 	  />
   )

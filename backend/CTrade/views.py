@@ -128,3 +128,35 @@ def testTalib(request):
         # df.to_csv('output.csv')
 
         return JsonResponse(json.loads(jsonDF), safe = False)
+
+
+@api_view(('POST',))
+def overallPatterns(request):
+    if request.method == "POST":
+        param = request.data
+        # starting params defined
+        candles = param['candleData']
+        # create base dataframe to use Talib analysis on
+        df = pd.DataFrame(candles, columns = ['time', 'low', 'high', 'open', 'close', 'volume'])
+        df = df.drop_duplicates()
+        df['score'] = 0
+        # fetch patterns and iterate over each
+        patterns = Pattern.objects.all()
+        for pattern in patterns:
+            pat = getattr(talib, pattern.key)
+            if pattern.penetration:
+                num = pat(df['open'], df['high'], df['low'], df['close'], penetration=0)
+            else:
+                num = pat(df['open'], df['high'], df['low'], df['close'])
+            
+            for n in range(len(num)):
+                if num[n] == 100:
+                    df.loc[n,'score'] += 1
+                    print(df)
+                elif num[n] == -100:
+                    df.loc[n,'score'] -= 1
+
+        jsonDF = df.to_json(orient='records')
+        # df.to_csv('output.csv')
+
+        return JsonResponse(json.loads(jsonDF), safe = False)
