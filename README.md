@@ -5,10 +5,11 @@
 
 ### To Do
 - Search Func
-- Zoom In/Out
-- 
+- Export CSV data
+- Analyze profit/margins
+- Point system for more/less likely bull/bear signals at given point of time
 
 ### Patterns/Algo
-- Bullish Engulfing
-- Trend lines
+- Ta-lib
 - consecutive direction
+- 
