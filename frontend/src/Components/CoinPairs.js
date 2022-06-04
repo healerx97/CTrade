@@ -72,7 +72,6 @@ function CoinPairs({currentCoin, setCurrentCoin, setCandleData, candleData, curT
                     time: Date.parse(bar.t) / 1000
                 }
             ))
-            console.log(data)
             setCandleData(data)
             setCurPattern(62)
         })
