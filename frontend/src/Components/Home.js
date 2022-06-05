@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react'
 import Chart from './Chart'
 import {CSVLink} from "react-csv"
 
-function Home({candleData, curPattern, setCurPattern, patternData, setPatternData}) {
-  const [chartData, setChartData] = useState([])
+function Home({candleData, currentCoin, curPattern, setCurPattern, patternData, setPatternData}) {
   let [patternList, setPatternList] = useState([])
   let [overallPatternData, setOverallPatternData] = useState([])
   let [downloadButton, setDownloadButton] = useState(false)
@@ -91,21 +90,22 @@ function Home({candleData, curPattern, setCurPattern, patternData, setPatternDat
   return (
     <div class ='container mx-auto border'>
         <div className='md:flex-row flex-col flex items-center justify-center bg-blue-50'>
-            <div class=''>
+            <div class='flex flex-col'>
+              <div class='text-lg font-bold p-2 text-center whitespace-nowrap'>{currentCoin.displayName}</div>
               {<Chart candleData = {candleData} patternData={patternData}/>}
             </div>
             <div class='p-2 border flex-col flex w-56 gap-3 overflow-hidden'>
                 <div>
                   <label for="patterns">Pattern Analysis:</label>
-                  <select name="patterns" class ="w-full" onChange={(e)=>setCurPattern(e.target.value)}>
+                  <select name="patterns" class ="w-full rounded shadow-sm mb-3" onChange={(e)=>setCurPattern(e.target.value)}>
                       {renderPatternOptions}
                   </select>
                 </div>
                 <div class='flex flex-col justify-center items-center gap-2'>
-                  <button class='rounded shadow h-full' onClick={handleOverallPattern}>
-                    Get Overall Pattern Analysis
+                  <button class='rounded shadow h-10 p-1 bg-green-100' onClick={handleOverallPattern}>
+                    Get Overall Pattern Report
                   </button>
-                  {downloadButton ? (<CSVLink onClick={()=> setDownloadButton(false) }class='shadow h-full'{...csvData}>Download</CSVLink>) : null}
+                  {downloadButton ? (<CSVLink onClick={()=> setDownloadButton(false) }class='rounded shadow h-10 p-1 bg-green-100'{...csvData}>Download</CSVLink>) : null}
                 </div>
             </div>
         </div>

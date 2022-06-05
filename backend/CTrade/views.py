@@ -144,6 +144,9 @@ def overallPatterns(request):
         patterns = Pattern.objects.all()
         for pattern in patterns:
             pat = getattr(talib, pattern.key)
+            if 'Doji' in pattern.name:
+                print(pattern.name)
+                continue
             if pattern.penetration:
                 num = pat(df['open'], df['high'], df['low'], df['close'], penetration=0)
             else:
@@ -152,7 +155,6 @@ def overallPatterns(request):
             for n in range(len(num)):
                 if num[n] == 100:
                     df.loc[n,'score'] += 1
-                    print(df)
                 elif num[n] == -100:
                     df.loc[n,'score'] -= 1
 

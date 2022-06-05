@@ -24,7 +24,7 @@ function App() {
         <Routes>
           <Route path = '/allcoinpairs' element={<CoinPairs currentCoin={currentCoin} setCurrentCoin={setCurrentCoin} candleData={candleData} setCandleData={setCandleData} curTimeFrame={curTimeFrame} setCurPattern={setCurPattern} navigate={navigate}/>}/>
           <Route path = '/candles' element={<Candles candleData={candleData} setCandleData={setCandleData} currentCoin={currentCoin} curTimeFrame={curTimeFrame} setCurTimeFrame={setCurTimeFrame}/>}/>
-          <Route path = '/' element={<Home candleData = {candleData} curPattern={curPattern} setCurPattern= {setCurPattern} patternData={patternData} setPatternData={setPatternData} />}/>
+          <Route path = '/' element={<Home candleData = {candleData} currentCoin={currentCoin} curPattern={curPattern} setCurPattern= {setCurPattern} patternData={patternData} setPatternData={setPatternData} />}/>
         </Routes>
 
         
